@@ -1,0 +1,10 @@
+title = "project-gitleaks-config"
+
+[allowlist]
+description = "Allow documented placeholders used by public-safe examples."
+regexes = [
+  '''change_me_[A-Za-z0-9_]+''',
+  '''replace_with_[A-Za-z0-9_]+''',
+  '''troque_[A-Za-z0-9_]+''',
+  '''DEV_ONLY__troque_isto_por_uma_chave_grande_com_32\+_chars''',
+]

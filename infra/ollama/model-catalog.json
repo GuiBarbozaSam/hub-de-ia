@@ -1,0 +1,21 @@
+{
+  "minimumOllamaVersion": "0.7.0",
+  "profiles": {
+    "safe": {
+      "textModel": "gemma3:4b",
+      "visualModel": "gemma3:4b"
+    },
+    "balanced": {
+      "textModel": "qwen2.5:14b",
+      "visualModel": "qwen2.5vl:7b"
+    },
+    "max": {
+      "textModel": "qwen2.5:32b",
+      "visualModel": "qwen2.5vl:32b"
+    }
+  },
+  "compatibilityModels": [
+    "qwen3.5:35b-a3b-q4_K_M",
+    "qwen3-vl:30b-a3b-instruct-q4_K_M"
+  ]
+}

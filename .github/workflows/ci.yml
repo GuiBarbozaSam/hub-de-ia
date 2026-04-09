@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  build-test-scan:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Build .NET
+        run: dotnet build .\backend_dotnet\src\WebApi\WebApi.csproj --configuration Release
+
+      - name: Test .NET
+        run: dotnet test .\backend_dotnet\tests\WebApi.Tests\WebApi.Tests.csproj --configuration Release
+
+      - name: Install Python dependencies
+        working-directory: .\backend_python
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pytest
+
+      - name: Test Python
+        working-directory: .\backend_python
+        run: python -m pytest tests
+
+      - name: Flutter pub get
+        working-directory: .\app_flutter
+        run: flutter pub get
+
+      - name: Test Flutter
+        working-directory: .\app_flutter
+        run: flutter test
+
+      - name: Install gitleaks
+        run: choco install gitleaks -y
+
+      - name: Secret scan
+        run: powershell -ExecutionPolicy Bypass -File .\scripts\scan-secrets.ps1
